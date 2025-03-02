@@ -44,6 +44,8 @@ export default function TabsLayout() {
         name="create"
         options={{
           title: "Create",
+          headerShown: false,
+          tabBarStyle: { display: "none" },
           headerTintColor: "#4c00cf",
           tabBarIcon: ({ color }) => (
             <AntDesign name="pluscircleo" size={24} color={color} />
