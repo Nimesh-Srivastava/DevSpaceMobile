@@ -8,18 +8,24 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
+    Image,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import { useState } from "react";
+import { useAtom } from "jotai";
+import { selectedGroupAtom } from "../../../atoms";
 
 export default function CreateScreen() {
     const [title, setTitle] = useState<string>("");
     const [body, setBody] = useState<string>("");
 
+    const [group, setGroup] = useAtom(selectedGroupAtom);
+
     const goBack = () => {
         setTitle("");
         setBody("");
+        setGroup(null);
         router.back();
     };
 
@@ -65,10 +71,22 @@ export default function CreateScreen() {
                     {/* space selector */}
                     <Link href={"groupSelector"} asChild>
                         <Pressable style={styles.spaceContainer}>
-                            <Text style={styles.s}>s/</Text>
-                            <Text style={{ color: "black", fontWeight: "bold" }}>
-                                Select a space
-                            </Text>
+                            {group ? (
+                                <>
+                                    <Image
+                                        source={{ uri: group.image }}
+                                        style={{ width: 24, aspectRatio: 1, borderRadius: 12 }}
+                                    />
+                                    <Text>{group.name}</Text>
+                                </>
+                            ) : (
+                                <>
+                                    <Text style={styles.s}>s/</Text>
+                                    <Text style={{ color: "black", fontWeight: "bold" }}>
+                                        Select a space
+                                    </Text>
+                                </>
+                            )}
                             <AntDesign name="caretdown" size={12} color="black" />
                         </Pressable>
                     </Link>
