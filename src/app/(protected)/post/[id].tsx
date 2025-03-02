@@ -12,7 +12,7 @@ export default function DetailedPost() {
   }
 
   return (
-    <View>
+    <View style={{ backgroundColor: "#101218", flex: 1 }}>
       <PostListItem post={detailedPost} isDetailedPost />
     </View>
   );

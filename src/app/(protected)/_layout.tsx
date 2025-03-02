@@ -18,7 +18,7 @@ export default function AppLayout() {
         name="post/[id]"
         options={{
           headerTitle: "",
-          headerStyle: { backgroundColor: "#4c00cf" },
+          headerStyle: { backgroundColor: "#9146ff" },
           headerLeft: () => (
             <AntDesign
               name="close"

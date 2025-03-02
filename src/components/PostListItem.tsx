@@ -15,16 +15,18 @@ export default function PostListItem({
 }: PostListItemProps) {
   const shouldShowImage = isDetailedPost || post.image;
   const shouldShowDesc = isDetailedPost || !post.image;
+  const iconColor = "white";
   return (
     <Link href={`/post/${post.id}`}>
       <View
         style={{
+          width: "99.6%",
           paddingHorizontal: 15,
-          paddingVertical: 10,
+          paddingVertical: 15,
           gap: 7,
-          borderBottomColor: "lightgrey",
-          borderBottomWidth: 0.5,
-          backgroundColor: "white",
+          borderColor: "grey",
+          borderBottomWidth: 0.2,
+          backgroundColor: "#101218",
         }}
       >
         {/* post header */}
@@ -36,18 +38,22 @@ export default function PostListItem({
           <View>
             <View style={{ flexDirection: "row", gap: 5 }}>
               <Text
-                style={{ fontWeight: "bold", fontSize: 13, color: "#3A3B3C" }}
+                style={{ fontWeight: "bold", fontSize: 13, color: "lightgrey" }}
               >
                 {post.group.name}
               </Text>
               <Text
-                style={{ color: "grey", fontSize: 13, alignSelf: "flex-start" }}
+                style={{
+                  color: "lightgrey",
+                  fontSize: 13,
+                  alignSelf: "flex-start",
+                }}
               >
                 {formatDistanceToNowStrict(new Date(post.created_at))}
               </Text>
             </View>
             {isDetailedPost && (
-              <Text style={{ fontSize: 13, color: "#2E5DAA" }}>
+              <Text style={{ fontSize: 13, color: "lightgrey" }}>
                 {post.user.name}
               </Text>
             )}
@@ -56,13 +62,13 @@ export default function PostListItem({
             onPress={() => console.error("Pressed")}
             style={{
               marginLeft: "auto",
-              backgroundColor: "#4c00cf",
+              backgroundColor: "#b9a3e3",
               borderRadius: 10,
             }}
           >
             <Text
               style={{
-                color: "white",
+                color: "black",
                 paddingVertical: 2,
                 paddingHorizontal: 7,
                 fontWeight: "bold",
@@ -75,7 +81,9 @@ export default function PostListItem({
         </View>
 
         {/* post content */}
-        <Text style={{ fontWeight: "bold", fontSize: 17 }}>{post.title}</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 17, color: "white" }}>
+          {post.title}
+        </Text>
         {shouldShowImage && post.image && (
           <Image
             source={{ uri: post.image }}
@@ -84,24 +92,28 @@ export default function PostListItem({
         )}
 
         {shouldShowDesc && post.description && (
-          <Text numberOfLines={isDetailedPost ? undefined : 4}>
+          <Text
+            style={{ color: "white" }}
+            numberOfLines={isDetailedPost ? undefined : 4}
+          >
             {post.description}
           </Text>
         )}
 
         {/* post footer */}
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", paddingVertical: 5 }}>
           <View style={{ flexDirection: "row", gap: 10 }}>
             <View style={[{ flexDirection: "row" }, styles.iconBox]}>
               <MaterialCommunityIcons
                 name="arrow-up-bold-outline"
                 size={19}
-                color="black"
+                color={iconColor}
               />
               <Text
                 style={{
                   fontWeight: "500",
                   marginLeft: 5,
+                  color: iconColor,
                   alignSelf: "center",
                 }}
               >
@@ -119,20 +131,21 @@ export default function PostListItem({
               <MaterialCommunityIcons
                 name="arrow-down-bold-outline"
                 size={19}
-                color="black"
+                color={iconColor}
               />
             </View>
             <View style={[{ flexDirection: "row" }, styles.iconBox]}>
               <MaterialCommunityIcons
                 name="comment-outline"
                 size={19}
-                color="black"
+                color={iconColor}
               />
               <Text
                 style={{
                   fontWeight: "500",
                   marginLeft: 5,
                   alignSelf: "center",
+                  color: iconColor,
                 }}
               >
                 {post.nr_of_comments}
@@ -143,13 +156,13 @@ export default function PostListItem({
             <MaterialCommunityIcons
               name="trophy-outline"
               size={19}
-              color="black"
+              color={iconColor}
               style={styles.iconBox}
             />
             <MaterialCommunityIcons
               name="share-outline"
               size={19}
-              color="black"
+              color={iconColor}
               style={styles.iconBox}
             />
           </View>
@@ -161,8 +174,8 @@ export default function PostListItem({
 
 const styles = StyleSheet.create({
   iconBox: {
-    borderWidth: 0.5,
-    borderColor: "#D4D4D4",
+    borderWidth: 0.2,
+    borderColor: "grey",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 20,

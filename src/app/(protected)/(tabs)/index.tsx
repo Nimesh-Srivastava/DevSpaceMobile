@@ -4,8 +4,9 @@ import PostListItem from "../../../components/PostListItem";
 
 export default function HomeScreen() {
   return (
-    <View>
+    <View style={{ backgroundColor: "#101218" }}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={posts}
         renderItem={({ item }) => <PostListItem post={item} />}
       />
