@@ -1,9 +1,21 @@
 import { Tabs } from "expo-router";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@clerk/clerk-expo";
+import { useState } from "react";
+import { ActivityIndicator, Alert } from "react-native";
 
 export default function TabsLayout() {
     const { signOut } = useAuth();
+
+    const [btnLoad, setBtnLoad] = useState<boolean>(false)
+
+    const handleSignOut = () => {
+        setBtnLoad(true)
+        Alert.alert("Signed out")
+        signOut()
+        setBtnLoad(false)
+    }
+
     return (
         <Tabs
             screenOptions={{
@@ -18,13 +30,16 @@ export default function TabsLayout() {
                 name="index"
                 options={{
                     headerRight: () => (
-                        <Feather
-                            name="log-out"
-                            size={24}
-                            color={"red"}
-                            style={{ paddingRight: 10 }}
-                            onPress={() => signOut()}
-                        />
+                        <>
+                            {btnLoad ? <ActivityIndicator /> :
+                                <Feather
+                                    name="log-out"
+                                    size={24}
+                                    color={"red"}
+                                    style={{ paddingRight: 10 }}
+                                    onPress={() => handleSignOut()}
+                                />}
+                        </>
                     ),
                     title: "Home",
                     headerTitle: "DevSpace",
