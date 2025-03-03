@@ -3,13 +3,15 @@ import { ActivityIndicator, Text, View } from "react-native";
 import PostListItem from "../../../components/PostListItem";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPostById } from "../../services/postService";
+import { useSupabase } from "../../../lib/supabase";
 
 export default function DetailedPost() {
+    const supabase = useSupabase()
     const { id } = useLocalSearchParams<{ id: string }>();
 
     const { data: post, isLoading, error } = useQuery({
         queryKey: ["posts", id],
-        queryFn: () => fetchPostById(id),
+        queryFn: () => fetchPostById(id, supabase),
         staleTime: 3000
     })
 

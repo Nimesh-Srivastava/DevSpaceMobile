@@ -17,12 +17,13 @@ import { useState } from "react";
 import { useAtom } from "jotai";
 import { selectedGroupAtom } from "../../../atoms";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "../../../lib/supabase";
-import { TablesInsert } from "../../../types/database.types";
+import { useSupabase } from "../../../lib/supabase";
+import { Database, TablesInsert } from "../../../types/database.types";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 type InsertPost = TablesInsert<"posts">
 
-const insertPost = async (post: InsertPost) => {
+const insertPost = async (post: InsertPost, supabase: SupabaseClient<Database>) => {
     const { data, error } = await supabase
         .from("posts").insert(post).select().single()
 
@@ -32,6 +33,8 @@ const insertPost = async (post: InsertPost) => {
 }
 
 export default function CreateScreen() {
+    const supabase = useSupabase()
+
     const [title, setTitle] = useState<string>("");
     const [body, setBody] = useState<string>("");
     const [group, setGroup] = useAtom(selectedGroupAtom);
@@ -49,8 +52,7 @@ export default function CreateScreen() {
             return insertPost({
                 title, description: body,
                 group_id: group.id,
-                user_id: "018395cf-cb87-4c3d-aab9-16b88de6c8e0"
-            })
+            }, supabase)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["posts"] })

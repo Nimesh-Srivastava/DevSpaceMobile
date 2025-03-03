@@ -10,7 +10,7 @@ type PostListItemProps = {
 };
 
 type Post = Tables<"posts"> & {
-    user: Tables<"users">;
+    //user: Tables<"users">;
     group: Tables<"groups">;
 };
 
@@ -58,7 +58,7 @@ export default function PostListItem({
                         </View>
                         {isDetailedPost && (
                             <Text style={{ fontSize: 13, color: "lightgrey" }}>
-                                {post.user.name}
+                                {post.user?.name}
                             </Text>
                         )}
                     </View>

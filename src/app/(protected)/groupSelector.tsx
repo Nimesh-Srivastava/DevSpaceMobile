@@ -18,16 +18,18 @@ import { selectedGroupAtom } from "../../atoms";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGroups } from "../services/groupService";
 import { Tables } from "../../types/database.types";
+import { useSupabase } from "../../lib/supabase";
 
 type Group = Tables<"groups">
 
 export default function GroupSelector() {
+    const supabase = useSupabase()
     const [searchVal, setSearchVal] = useState<string>("");
     const setGroup = useSetAtom(selectedGroupAtom);
 
     const { data: groups, isLoading, error } = useQuery({
         queryKey: ["groups", searchVal],
-        queryFn: () => fetchGroups(searchVal),
+        queryFn: () => fetchGroups(searchVal, supabase),
         staleTime: 10000,
         placeholderData: (previousData) => previousData
     })
@@ -36,13 +38,21 @@ export default function GroupSelector() {
         setGroup(group);
         router.back();
     };
-    if (isLoading) { return <ActivityIndicator /> }
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, backgroundColor: "black", alignItems: "center" }} >
+                <ActivityIndicator />
+            </View>
+        )
+    }
 
-    if (error || !groups) { return <Text>Error fetching spaces</Text> }
-
-    //const filteredGroups = groups.filter((group) =>
-    //    group.name.toLowerCase().includes(searchVal.toLowerCase()),
-    //);
+    if (error || !groups) {
+        return (
+            <View style={{ flex: 1, backgroundColor: "black" }} >
+                <Text style={{ color: "white" }} >Error fetching spaces</Text>
+            </View>
+        )
+    }
 
     return (
         <SafeAreaView
