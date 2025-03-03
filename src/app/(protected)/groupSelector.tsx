@@ -1,6 +1,8 @@
 import {
+    ActivityIndicator,
     FlatList,
     Image,
+    KeyboardAvoidingView,
     Pressable,
     SafeAreaView,
     Text,
@@ -10,23 +12,35 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
-import groups from "../../../assets/data/groups.json";
+//import groups from "../../../assets/data/groups.json";
 import { useSetAtom } from "jotai";
 import { selectedGroupAtom } from "../../atoms";
 import { Group } from "../../types";
+import { useQuery } from "@tanstack/react-query";
+import { fetchGroups } from "../services/groupService";
 
 export default function GroupSelector() {
     const [searchVal, setSearchVal] = useState<string>("");
     const setGroup = useSetAtom(selectedGroupAtom);
 
+    const { data: groups, isLoading, error } = useQuery({
+        queryKey: ["groups", searchVal],
+        queryFn: () => fetchGroups(searchVal),
+        staleTime: 10000,
+        placeholderData: (previousData) => previousData
+    })
+
     const onGroupSelected = (group: Group) => {
         setGroup(group);
         router.back();
     };
+    if (isLoading) { return <ActivityIndicator /> }
 
-    const filteredGroups = groups.filter((group) =>
-        group.name.toLowerCase().includes(searchVal.toLowerCase()),
-    );
+    if (error || !groups) { return <Text>Error fetching spaces</Text> }
+
+    //const filteredGroups = groups.filter((group) =>
+    //    group.name.toLowerCase().includes(searchVal.toLowerCase()),
+    //);
 
     return (
         <SafeAreaView
@@ -96,27 +110,29 @@ export default function GroupSelector() {
                 )}
             </View>
 
-            <FlatList
-                style={{ marginHorizontal: 10 }}
-                data={filteredGroups}
-                renderItem={({ item }) => (
-                    <Pressable
-                        onPress={() => onGroupSelected(item)}
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 10,
-                            marginBottom: 15,
-                        }}
-                    >
-                        <Image
-                            source={{ uri: item.image }}
-                            style={{ width: 40, aspectRatio: 1, borderRadius: 20 }}
-                        />
-                        <Text style={{ color: "white", fontSize: 15 }}>{item.name}</Text>
-                    </Pressable>
-                )}
-            />
+            <KeyboardAvoidingView>
+                <FlatList
+                    style={{ marginHorizontal: 10 }}
+                    data={groups}
+                    renderItem={({ item }) => (
+                        <Pressable
+                            onPress={() => onGroupSelected(item)}
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 10,
+                                marginBottom: 15,
+                            }}
+                        >
+                            <Image
+                                source={{ uri: item.image }}
+                                style={{ width: 40, aspectRatio: 1, borderRadius: 20 }}
+                            />
+                            <Text style={{ color: "white", fontSize: 15 }}>{item.name}</Text>
+                        </Pressable>
+                    )}
+                />
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
