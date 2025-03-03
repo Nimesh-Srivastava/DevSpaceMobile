@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../../services/postService";
 
 export default function HomeScreen() {
-    const { data: posts, isLoading, error } = useQuery({
+    const { data: posts, isLoading, error, refetch, isRefetching } = useQuery({
         queryKey: ["posts"],
         queryFn: async () => fetchPosts(),
-        staleTime: 3000
+        staleTime: 10000
     })
     if (isLoading) {
         return <ActivityIndicator />
@@ -21,6 +21,8 @@ export default function HomeScreen() {
                 showsVerticalScrollIndicator={false}
                 data={posts}
                 renderItem={({ item }) => <PostListItem post={item} />}
+                onRefresh={refetch}
+                refreshing={isRefetching}
             />
         </View>
     );

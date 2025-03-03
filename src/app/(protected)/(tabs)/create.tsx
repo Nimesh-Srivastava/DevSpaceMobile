@@ -9,18 +9,55 @@ import {
     Platform,
     ScrollView,
     Image,
+    Alert,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { useAtom } from "jotai";
 import { selectedGroupAtom } from "../../../atoms";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "../../../lib/supabase";
+import { TablesInsert } from "../../../types/database.types";
+
+type InsertPost = TablesInsert<"posts">
+
+const insertPost = async (post: InsertPost) => {
+    const { data, error } = await supabase
+        .from("posts").insert(post).select().single()
+
+    if (error) { throw error }
+    else { return data }
+
+}
 
 export default function CreateScreen() {
     const [title, setTitle] = useState<string>("");
     const [body, setBody] = useState<string>("");
-
     const [group, setGroup] = useAtom(selectedGroupAtom);
+
+    const queryClient = useQueryClient()
+
+    const { mutate, data, isPending, error } = useMutation({
+        mutationFn: async () => {
+            if (!group) {
+                throw new Error("Please select a space")
+            }
+            if (!title) {
+                throw new Error("Please provide a title for your post")
+            }
+            return insertPost({
+                title, description: body,
+                group_id: group.id,
+                user_id: "018395cf-cb87-4c3d-aab9-16b88de6c8e0"
+            })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["posts"] })
+            goBack()
+        },
+        onError: (error) => { Alert.alert("Failed to post", error.message) }
+    })
 
     const goBack = () => {
         setTitle("");
@@ -53,10 +90,11 @@ export default function CreateScreen() {
                     onPress={() => goBack()}
                 />
                 <Pressable
-                    onPress={() => console.error("pressed")}
+                    onPress={() => mutate()}
                     style={{ marginLeft: "auto" }}
+                    disabled={isPending}
                 >
-                    <Text style={styles.postButton}>Post</Text>
+                    <Text style={styles.postButton}>{isPending ? "Posting" : "Post"}</Text>
                 </Pressable>
             </View>
 

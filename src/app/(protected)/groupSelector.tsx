@@ -3,6 +3,7 @@ import {
     FlatList,
     Image,
     KeyboardAvoidingView,
+    Platform,
     Pressable,
     SafeAreaView,
     Text,
@@ -111,7 +112,9 @@ export default function GroupSelector() {
                 )}
             </View>
 
-            <KeyboardAvoidingView>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
+                style={{ flex: 1 }}>
                 <FlatList
                     style={{ marginHorizontal: 10 }}
                     data={groups}
