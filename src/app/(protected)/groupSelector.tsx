@@ -12,12 +12,13 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
-//import groups from "../../../assets/data/groups.json";
 import { useSetAtom } from "jotai";
 import { selectedGroupAtom } from "../../atoms";
-import { Group } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGroups } from "../services/groupService";
+import { Tables } from "../../types/database.types";
+
+type Group = Tables<"groups">
 
 export default function GroupSelector() {
     const [searchVal, setSearchVal] = useState<string>("");
