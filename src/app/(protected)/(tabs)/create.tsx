@@ -117,7 +117,7 @@ export default function CreateScreen() {
                                         source={{ uri: group.image }}
                                         style={{ width: 24, aspectRatio: 1, borderRadius: 12 }}
                                     />
-                                    <Text>{group.name}</Text>
+                                    <Text>s/{group.name}</Text>
                                 </>
                             ) : (
                                 <>

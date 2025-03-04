@@ -12,7 +12,11 @@ export default function HomeScreen() {
         staleTime: 10000
     })
     if (isLoading) {
-        return <ActivityIndicator />
+        return (
+            <View style={{ flex: 1, backgroundColor: "#101218", paddingTop: 200 }}>
+                <ActivityIndicator />
+            </View>
+        )
     }
     if (error) {
         return <Text>Error fetching posts</Text>

@@ -62,6 +62,7 @@ export default function PostListItem({
                             </Text>
                         )}
                     </View>
+                    {/*
                     <Pressable
                         onPress={() => console.error("Pressed")}
                         style={{
@@ -82,6 +83,7 @@ export default function PostListItem({
                             Join
                         </Text>
                     </Pressable>
+                */}
                 </View>
 
                 {/* post content */}

@@ -40,8 +40,10 @@ export default function GroupSelector() {
     };
     if (isLoading) {
         return (
-            <View style={{ flex: 1, backgroundColor: "black", alignItems: "center" }} >
-                <ActivityIndicator />
+            <View style={{ flex: 1, backgroundColor: "black", alignItems: "center", alignContent: "center" }} >
+                <View style={{ paddingTop: 200 }} >
+                    <ActivityIndicator />
+                </View>
             </View>
         )
     }
