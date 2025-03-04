@@ -44,7 +44,7 @@ export default function PostListItem({
                             <Text
                                 style={{ fontWeight: "bold", fontSize: 13, color: "lightgrey" }}
                             >
-                                {post.group.name}
+                                s/{post.group.name}
                             </Text>
                             <Text
                                 style={{

@@ -142,7 +142,7 @@ export default function GroupSelector() {
                                 source={{ uri: item.image }}
                                 style={{ width: 40, aspectRatio: 1, borderRadius: 20 }}
                             />
-                            <Text style={{ color: "white", fontSize: 15 }}>{item.name}</Text>
+                            <Text style={{ color: "white", fontSize: 15 }}>s/{item.name}</Text>
                         </Pressable>
                     )}
                 />
